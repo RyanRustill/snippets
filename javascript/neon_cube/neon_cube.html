@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Neon Cube Animation</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: monospace;
+    }
+
+    .container {
+      position: relative;
+      border: 2px solid cyan;
+      padding: 20px;
+      box-shadow: 0 0 30px cyan;
+      display: inline-block;
+    }
+
+    canvas {
+      background-color: black;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <canvas id="activationCanvas" width="600" height="600"></canvas>
+  </div>
+
+  <script>
+    // Get our canvas element - this is our drawing surface!
+    const canvas = document.getElementById("activationCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Define all the corners of our 3D cube in the order we want to draw them
+    // This took forever to figure out, but it creates a perfect wireframe cube!
+    const points = [
+      {x: 150, y: 450},  // front bottom left (start here)
+      {x: 350, y: 450},  // front bottom right
+      {x: 450, y: 350},  // back bottom right (perspective makes it higher)
+      {x: 250, y: 350},  // back bottom left
+      {x: 150, y: 450},  // back to front bottom left (complete bottom face)
+      {x: 150, y: 250},  // front top left (go up the front edge)
+      {x: 350, y: 250},  // front top right
+      {x: 350, y: 450},  // back down to front bottom right
+      {x: 450, y: 350},  // back to back bottom right
+      {x: 450, y: 150},  // back top right (up the back edge)
+      {x: 250, y: 150},  // back top left
+      {x: 250, y: 350},  // back down to back bottom left
+      {x: 250, y: 150},  // back up to back top left
+      {x: 150, y: 250},  // across to front top left
+      {x: 350, y: 250},  // across to front top right
+      {x: 450, y: 150}   // final line to back top right
+    ];
+
+    let index = 0;      // Which line segment we're currently drawing
+    let progress = 0;   // How much of the current line we've drawn (0 to 1)
+
+    // Reset everything to start the animation over
+    function reset() {
+      index = 0;
+      progress = 0;
+    }
+
+    // Draw a partial line from point 1 to point 2, based on how far along we are
+    function drawLineSegment(p1, p2, t) {
+      // Calculate the current endpoint based on progress (t)
+      const x = p1.x + (p2.x - p1.x) * t;
+      const y = p1.y + (p2.y - p1.y) * t;
+      
+      // Draw the line with that sick cyan glow effect!
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = "cyan";
+      ctx.shadowColor = "cyan";
+      ctx.shadowBlur = 15;        // This creates the glow!
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // Main animation loop - draws the cube line by line
+    function animate() {
+      // Clear the canvas for the next frame
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw all the lines we've already completed
+      for (let i = 0; i < index; i++) {
+        drawLineSegment(points[i], points[i + 1], 1);
+      }
+
+      // Draw the current line in progress
+      if (index < points.length - 1) {
+        drawLineSegment(points[index], points[index + 1], progress);
+        
+        progress += 0.01; // Speed of drawing (try changing this!)
+        
+        // If we've finished this line, move to the next one
+        if (progress >= 1) {
+          progress = 0;
+          index++;
+        }
+        
+        // Keep the animation going
+        requestAnimationFrame(animate);
+      } else {
+        // Cube is complete! Time for the pulse effect
+        pulseEffect();
+      }
+    }
+
+    // Cool pulsing glow effect after the cube finishes drawing
+    function pulseEffect() {
+      let pulse = 0;
+      
+      function pulseFrame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Make the glow fade and the line thickness vary
+        ctx.strokeStyle = `rgba(0,255,255,${1 - pulse})`;
+        ctx.lineWidth = 2 + Math.sin(pulse * 10) * 1.5;  // Thickness oscillates
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "cyan";
+        
+        // Draw the complete cube all at once
+        ctx.beginPath();
+        for (let i = 0; i < points.length - 1; i++) {
+          ctx.moveTo(points[i].x, points[i].y);
+          ctx.lineTo(points[i + 1].x, points[i + 1].y);
+        }
+        ctx.stroke();
+
+        pulse += 0.02;  // Speed of the pulse effect
+        
+        if (pulse < 1) {
+          requestAnimationFrame(pulseFrame);
+        } else {
+          // Wait a second, then start the whole thing over!
+          setTimeout(() => {
+            reset();
+            animate();
+          }, 1000);
+        }
+      }
+      
+      pulseFrame();
+    }
+
+    // Start the show!
+    animate();
+  </script>
+</body>
+</html>

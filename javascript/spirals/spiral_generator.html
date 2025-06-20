@@ -1,0 +1,94 @@
+<!--
+  Canvas Spiral Generator
+  Open in browser: just double click this file.
+  No setup or server required - pure browser magic!
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas Spiral Generator</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      border: 2px solid #444;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    #canvas {
+      display: block;
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" width="600" height="600"></canvas>
+  </div>
+
+  <script>
+    // Get our canvas - this is where the magic happens!
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // These variables control the spiral behavior
+    let a = 0;               // Distance to move forward (starts at 0, grows each step)
+    let b = 0;               // How much to turn each step (also grows!)
+    let x = canvas.width / 2;        // Start right in the center horizontally
+    let y = canvas.height / 3.5;     // Start about 1/3 down from the top
+    let angle = 0;           // Which direction we're facing (in degrees)
+
+    // Make our spiral bright yellow on black - looks so cool!
+    ctx.strokeStyle = "yellow";
+    ctx.lineWidth = 1;
+
+    function draw() {
+      // Convert our angle to radians (math needs radians, not degrees)
+      const radians = angle * (Math.PI / 180);
+
+      // Calculate where to draw the next line segment
+      // This is where trigonometry becomes your best friend!
+      const newX = x + a * Math.cos(radians);
+      const newY = y + a * Math.sin(radians);
+
+      // Draw a line from where we are to where we're going
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(newX, newY);
+      ctx.stroke();
+
+      // Move to the new position for the next line
+      x = newX;
+      y = newY;
+
+      // Here's where the spiral magic happens!
+      a += 2;      // Move farther each time (creates the expanding effect)
+      b += 0.8;    // Turn more sharply each time (creates the spiral curve)
+      angle += b;  // Update which direction we're facing
+
+      // Keep drawing until we've made enough turns (210 is the sweet spot)
+      if (b < 210) {
+        requestAnimationFrame(draw);  // This makes it animate smoothly!
+      }
+    }
+
+    // Start the spiral animation!
+    draw();
+  </script>
+</body>
+</html>
