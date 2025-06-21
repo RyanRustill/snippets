@@ -25,3 +25,8 @@ Pure HTML5 canvas and JavaScript - no frameworks needed. The cube appears stroke
 **Figured out how to make things bounce realistically with actual gravity and physics**
 
 This was my first time programming real physics! The balls bounce with gravity, lose energy when they hit walls, and you can click to add more. Way cooler than I expected physics programming to be.
+
+## [🎨 ASCII Pattern Generator](c/ascii_patterns) `C` `Mathematics`
+**Turning math equations into visual art using nothing but text characters**
+
+Four different mathematical patterns including the famous Mandelbrot fractal set! Going from basic C programs to generating complex mathematical visualizations feels incredible. Each pattern uses different math concepts like complex numbers and polar coordinates.

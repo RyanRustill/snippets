@@ -1,22 +1,24 @@
-# Project management files (not part of learning content)
+# CRITICAL: Never commit docs directory (private planning)
 docs/
 
-# OS generated files
+# Compiled binaries
+pattern_generator
+*.exe
+*.out
+
+# Object files
+*.o
+*.obj
+
+# System files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
 # Editor files
-.vscode/
-.idea/
 *.swp
 *.swo
 *~
 
-# Temporary files
-*.tmp
-*.temp 
+# IDE files
+.vscode/
+.idea/ 
