@@ -20,3 +20,8 @@ This one's cool because you can watch it being drawn in real-time. Same math as 
 **Built this cube that draws itself line-by-line with glowing neon effects**
 
 Pure HTML5 canvas and JavaScript - no frameworks needed. The cube appears stroke by stroke and then pulses with this cool glow effect before starting over.
+
+## [⚽ Bouncing Ball Physics](javascript/bouncing_ball) `JavaScript` `Physics`
+**Figured out how to make things bounce realistically with actual gravity and physics**
+
+This was my first time programming real physics! The balls bounce with gravity, lose energy when they hit walls, and you can click to add more. Way cooler than I expected physics programming to be.

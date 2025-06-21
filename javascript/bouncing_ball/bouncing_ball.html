@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Ball Physics</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        canvas {
+            border: 2px solid #fff;
+            background: #111;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        .info {
+            color: #fff;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 14px;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="info">Click to add more balls!</div>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Ball array to hold multiple balls
+        const balls = [];
+        
+        // Ball constructor - this is where we define what a ball IS
+        class Ball {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = Math.random() * 20 + 10; // Random size between 10-30
+                this.vx = (Math.random() - 0.5) * 10;  // Random horizontal speed
+                this.vy = (Math.random() - 0.5) * 10;  // Random vertical speed
+                this.color = `hsl(${Math.random() * 360}, 70%, 60%)`; // Random color
+            }
+            
+            // This is where the physics magic happens!
+            update() {
+                // Gravity pulls the ball down (makes it feel real!)
+                this.vy += 0.5;
+                
+                // Move the ball based on its velocity
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Bounce off the walls (this took me forever to figure out!)
+                if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+                    this.vx *= -0.8; // Bounce and lose some energy (realistic!)
+                }
+                
+                if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+                    this.vy *= -0.8; // Bounce and lose some energy
+                }
+                
+                // Keep the ball in bounds (edge case handling)
+                this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x));
+                this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y));
+            }
+            
+            // Draw the ball with a cool glow effect
+            draw() {
+                ctx.beginPath();
+                
+                // Create a glowing effect (learned this from the neon cube!)
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = this.color;
+                
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                
+                // Add a bright center for extra glow
+                ctx.shadowBlur = 5;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius * 0.3, 0, Math.PI * 2);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+                
+                // Reset shadow for next drawing
+                ctx.shadowBlur = 0;
+            }
+        }
+        
+        // Start with one ball in the center
+        balls.push(new Ball(canvas.width / 2, canvas.height / 2));
+        
+        // Add more balls when clicked
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            balls.push(new Ball(x, y));
+        });
+        
+        // The main animation loop (this runs 60 times per second!)
+        function animate() {
+            // Clear the canvas (or we'd see trails everywhere)
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Update and draw each ball
+            balls.forEach(ball => {
+                ball.update(); // Calculate new position
+                ball.draw();   // Draw it on the canvas
+            });
+            
+            // Do it again! (This creates the smooth animation)
+            requestAnimationFrame(animate);
+        }
+        
+        // Start the magic!
+        animate();
+    </script>
+</body>
+</html> 
