@@ -1,4 +1,4 @@
-# CRITICAL: Never commit docs directory (private planning)
+# Docs directory
 docs/
 
 # Compiled binaries
