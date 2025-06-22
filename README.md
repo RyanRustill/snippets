@@ -11,6 +11,11 @@ Everything here actually runs and has instructions if you want to try it yoursel
 
 The math behind this blew my mind - just two simple variables create this incredible expanding spiral pattern. Takes about 30 seconds to watch it draw itself.
 
+## [🌈 Rainbow Spiral Generator](python/rainbow_spiral) `Python` `turtle` `color`
+**Figured out how to make spirals that cycle through every color in the rainbow using math**
+
+This was my first time combining color theory with programming! I discovered you can use trigonometric functions to calculate smooth color transitions. The same spiral pattern as before, but now it flows through the entire color spectrum.
+
 ## [🌪️ Canvas Spiral](javascript/spirals) `JavaScript` `Canvas`
 **Same spiral pattern but in the browser with real-time animation**
 
