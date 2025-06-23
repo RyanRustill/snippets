@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Rain Animation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+        
+        canvas {
+            display: block;
+            background: #000;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas to full screen
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // Characters for the rain effect
+        const characters = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const charArray = characters.split('');
+        
+        // Column settings
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        
+        // Array to store the y position of each drop
+        const drops = [];
+        
+        // Initialize drops
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * canvas.height;
+        }
+        
+        // Animation function
+        function draw() {
+            // Create trailing effect by drawing semi-transparent black rectangle
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set text style
+            ctx.fillStyle = '#00ff00';
+            ctx.font = fontSize + 'px Courier New';
+            
+            // Draw characters
+            for (let i = 0; i < drops.length; i++) {
+                // Random character
+                const char = charArray[Math.floor(Math.random() * charArray.length)];
+                
+                // Draw character
+                ctx.fillText(char, i * fontSize, drops[i]);
+                
+                // Move drop down
+                drops[i] += fontSize;
+                
+                // Reset drop to top with some randomness
+                if (drops[i] > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+            }
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Recalculate columns
+            const newColumns = canvas.width / fontSize;
+            
+            // Adjust drops array
+            drops.length = newColumns;
+            for (let i = 0; i < newColumns; i++) {
+                if (drops[i] === undefined) {
+                    drops[i] = Math.random() * canvas.height;
+                }
+            }
+        });
+        
+        // Start animation
+        setInterval(draw, 50);
+        
+        // Add some interactivity - click to create burst
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Create a burst effect at click location
+            const columnIndex = Math.floor(x / fontSize);
+            if (columnIndex >= 0 && columnIndex < drops.length) {
+                drops[columnIndex] = y;
+                
+                // Affect nearby columns
+                for (let i = -3; i <= 3; i++) {
+                    const nearbyColumn = columnIndex + i;
+                    if (nearbyColumn >= 0 && nearbyColumn < drops.length) {
+                        drops[nearbyColumn] = y + (Math.random() - 0.5) * 50;
+                    }
+                }
+            }
+        });
+        
+        // Easter egg: Press 'N' for Neo mode (faster, more intense)
+        let neoMode = false;
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'n') {
+                neoMode = !neoMode;
+                if (neoMode) {
+                    document.body.style.background = '#001100';
+                    console.log('Neo mode activated! "There is no spoon..."');
+                } else {
+                    document.body.style.background = '#000';
+                    console.log('Neo mode deactivated.');
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
