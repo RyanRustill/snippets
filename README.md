@@ -31,6 +31,11 @@ Pure HTML5 canvas and JavaScript - no frameworks needed. The cube appears stroke
 
 This was my first time programming real physics! The balls bounce with gravity, lose energy when they hit walls, and you can click to add more. Way cooler than I expected physics programming to be.
 
+## [🌧️ Digital Rain Animation](javascript/digital_rain) `JavaScript` `Particles`
+**Matrix-style falling code rain with Japanese characters and interactive effects**
+
+My first real particle system! Green characters fall like in The Matrix, with realistic trailing effects and interactive features. Click anywhere to create burst effects, or press 'N' for Neo mode. Learning about alpha compositing and performance optimization was amazing.
+
 ## [🎨 ASCII Pattern Generator](c/ascii_patterns) `C` `Mathematics`
 **Turning math equations into visual art using nothing but text characters**
 
