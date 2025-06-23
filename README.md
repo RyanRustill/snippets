@@ -40,3 +40,8 @@ My first real particle system! Green characters fall like in The Matrix, with re
 **Turning math equations into visual art using nothing but text characters**
 
 Four different mathematical patterns including the famous Mandelbrot fractal set! Going from basic C programs to generating complex mathematical visualizations feels incredible. Each pattern uses different math concepts like complex numbers and polar coordinates.
+
+## [🌳 Fractal Tree Generator](python/fractal_tree) `Python` `recursion`
+**Today I learned how to grow realistic trees using recursion!**
+
+This can be a mind-bender to understand but the secret is recursion - a function that calls itself! Each branch creates two smaller branches, and those create more branches, until you get these tiny green leaves. This felt like unlocking a superpower, now I understand how computer graphics can simulate nature.
