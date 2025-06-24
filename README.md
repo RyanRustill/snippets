@@ -45,3 +45,8 @@ Four different mathematical patterns including the famous Mandelbrot fractal set
 **Today I learned how to grow realistic trees using recursion!**
 
 This can be a mind-bender to understand but the secret is recursion - a function that calls itself! Each branch creates two smaller branches, and those create more branches, until you get these tiny green leaves. This felt like unlocking a superpower, now I understand how computer graphics can simulate nature.
+
+## [🎆 Interactive Fireworks Display](javascript/fireworks_display) `JavaScript` `Physics` `Interaction`
+**Click anywhere to launch fireworks that explode into colorful sparks with realistic gravity!**
+
+This was my first time combining mouse events with multi-stage particle physics! Rockets shoot up from where you click, then explode into 30 sparks arranged in a perfect circle using trigonometry. The sparks fall with gravity and fade out over time. Learning how objects can create other objects (rockets creating sparks) felt like unlocking a whole new level of programming.
