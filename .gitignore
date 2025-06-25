@@ -1,6 +1,14 @@
 # Docs directory
 docs/
 
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+
 # Compiled binaries
 pattern_generator
 *.exe
