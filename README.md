@@ -50,3 +50,8 @@ This can be a mind-bender to understand but the secret is recursion - a function
 **Click anywhere to launch fireworks that explode into colorful sparks with realistic gravity!**
 
 This was my first time combining mouse events with multi-stage particle physics! Rockets shoot up from where you click, then explode into 30 sparks arranged in a perfect circle using trigonometry. The sparks fall with gravity and fade out over time. Learning how objects can create other objects (rockets creating sparks) felt like unlocking a whole new level of programming.
+
+## [🔺 Sierpinski Triangle Generator](python/sierpinski_triangle) `Python` `fractals` `recursion`
+**Today I discovered one of the most mind-blowing things in mathematics - the Sierpinski Triangle!**
+
+This fractal creates infinite complexity from the simplest rule: take a triangle, split it into 4 smaller triangles, throw away the middle one, and repeat forever. I built it with two stunning visual modes - classic triangles and bold circle patterns. The coolest part? This triangle has zero area but infinite perimeter. My brain still can't fully process that, but the code doesn't care - it just creates beauty!
