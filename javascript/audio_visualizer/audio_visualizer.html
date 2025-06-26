@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Visualizer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .recording-area {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #001122, #003344);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #00ff88;
+            border: none;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #00cc66;
+        }
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        .info {
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        
+
+    </style>
+</head>
+ <body>
+    <div class="controls">
+        <button id="startBtn">Start Audio Visualizer</button>
+        <button id="stopBtn" disabled>Stop</button>
+    </div>
+    
+    <div class="recording-area">
+        <canvas id="canvas"></canvas>
+    </div>
+    
+    <div class="info">
+        Click "Start" and play some music! The visualizer responds to your system audio.<br>
+    </div>
+    
+    <script>
+        // Get references to our HTML elements
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        // Set up canvas size for 600x600 recording area
+        function resizeCanvas() {
+            canvas.width = 600;
+            canvas.height = 600;
+        }
+        resizeCanvas();
+        
+        // Audio processing variables - this is where the magic happens!
+        let audioContext;  // The main audio processing engine
+        let analyser;      // Breaks down audio into frequency data
+        let dataArray;     // Array that holds the frequency values (0-255 for each frequency)
+        let source;        // Connects microphone to the audio context
+        let animationId;   // Keeps track of our animation loop
+        
+        // Particle system for extra visual sparkles when music gets intense
+        const particles = [];
+        
+        class Particle {
+            constructor(x, y, intensity, hue = null) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 4;  // Random horizontal speed
+                this.vy = (Math.random() - 0.5) * 4;  // Random vertical speed  
+                this.life = 1.0;                      // Starts fully visible
+                this.decay = Math.random() * 0.02 + 0.01; // How fast it fades (try 0.005-0.03)
+                this.size = intensity * 3;            // Bigger particles for louder sounds
+                this.hue = hue !== null ? hue : Math.random() * 360; // Match bar colors or random
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                this.size *= 0.98;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = `hsl(${this.hue}, 80%, 60%)`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+            
+            isDead() {
+                return this.life <= 0;
+            }
+        }
+        
+        async function startVisualizer() {
+            try {
+                // Ask for microphone permission - this is how we "hear" the music!
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        echoCancellation: false,    // We want raw audio data
+                        noiseSuppression: false,    // Don't clean up the sound
+                        autoGainControl: false      // Keep original volume levels
+                    } 
+                });
+                
+                // Set up the Web Audio API - this breaks sound into math we can visualize
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();  // This does the frequency analysis magic
+                source = audioContext.createMediaStreamSource(stream);  // Connect mic to analyzer
+                
+                // Connect microphone to analyzer (like plugging in an audio cable)
+                source.connect(analyser);
+                
+                // Configure the frequency analysis - TWEAK THESE for different effects!
+                analyser.fftSize = 1024;  // Try 256, 512, 1024, or 2048 (more = finer detail)
+                const bufferLength = analyser.frequencyBinCount;  // This gives us 512 frequency bins
+                dataArray = new Uint8Array(bufferLength);  // Array to hold frequency data (0-255 each)
+                
+                // Update button states
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                
+                // Start the visualization loop
+                visualize();
+                
+            } catch (err) {
+                console.error('Error accessing microphone:', err);
+                alert('Could not access microphone. Please allow microphone access and try again.');
+            }
+        }
+        
+        function stopVisualizer() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            
+            if (audioContext) {
+                audioContext.close();
+            }
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Clear particles
+            particles.length = 0;
+            
+            // Update button states
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+        
+        function visualize() {
+            animationId = requestAnimationFrame(visualize);  // Keep this loop running
+            
+            // Get the latest frequency data from the microphone
+            analyser.getByteFrequencyData(dataArray);  // Updates our dataArray with fresh audio data
+            
+            // Clear canvas with slight trail effect (creates the "fading" background)
+            ctx.fillStyle = 'rgba(0, 17, 34, 0.1)';  // Try changing the alpha (0.1) for different trail lengths
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // LAYOUT DESIGN: Split the canvas into two zones for better composition
+            const reservedTop = canvas.height * 0.2;  // Top 20% for pulsing circle (try 0.1-0.3)
+            const barArea = canvas.height * 0.8;      // Bottom 80% for frequency bars
+            
+            // BAR CONFIGURATION: More bars = smoother gradient, fewer = blockier but faster
+            const desiredBars = 300;                    // Try 150-500 for different looks
+            const barWidth = canvas.width / desiredBars; // Each bar width calculated automatically
+            
+            // FREQUENCY SELECTION: Focus on bass/mid frequencies where most music lives
+            const meaningfulDataRange = Math.min(60, dataArray.length);  // Try 30-100 for different ranges
+            
+            // THE MAIN VISUALIZATION LOOP: Draw rainbow bars for each frequency
+            for (let i = 0; i < desiredBars; i++) {
+                // MAP AUDIO TO VISUAL: Connect each bar to a specific frequency range
+                const dataIndex = Math.floor((i / desiredBars) * meaningfulDataRange);
+                let frequency = dataArray[dataIndex] / 255;  // Convert 0-255 to 0-1
+                
+                // Add subtle base activity so quiet parts still show the rainbow
+                if (frequency < 0.03) {
+                    frequency = 0.03 + Math.random() * 0.05;  // Try 0.01-0.1 for different base levels
+                }
+                
+                // Calculate how tall each bar should be based on audio intensity
+                const barHeight = frequency * barArea * 0.95;  // 0.95 leaves a small gap at top
+                
+                // Position each bar across the width
+                const x = i * barWidth;
+                const y = canvas.height - barHeight;  // Bars grow upward from bottom
+                
+                // THE SLIDING RAINBOW EFFECT: This is what makes the colors flow!
+                const time = Date.now() * 0.001;                // Current time in seconds
+                const colorShift = (time * 30) % 360;           // Try 10-60 for different speeds
+                const hue = ((i / desiredBars) * 360 + colorShift) % 360;  // Each bar gets shifted hue
+                const saturation = 85;                          // Try 70-100 for color intensity
+                const lightness = 50 + frequency * 30;         // Louder = brighter
+                
+                // Draw the actual bar with glowing effect
+                ctx.shadowColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                ctx.shadowBlur = 15;  // Try 5-25 for different glow intensities
+                ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                ctx.fillRect(x, y, Math.ceil(barWidth), barHeight);
+                
+                // PARTICLE SYSTEM: Create sparkles on intense frequencies
+                if (frequency > 0.5 && Math.random() < 0.4) {  // Try 0.3-0.7 frequency threshold, 0.1-0.8 spawn chance
+                    particles.push(new Particle(
+                        x + barWidth / 2,  // Spawn at center of bar
+                        y,                 // Spawn at top of bar
+                        frequency,         // Size based on intensity
+                        hue               // Match the bar's color
+                    ));
+                }
+            }
+            
+            // Reset shadow for particles
+            ctx.shadowBlur = 0;
+            
+            // Update and draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
+                particle.update();
+                particle.draw();
+                
+                // Remove dead particles
+                if (particle.isDead()) {
+                    particles.splice(i, 1);
+                }
+            }
+            
+            // PULSING CIRCLE: Shows overall audio volume in the clear top area
+            const averageFrequency = dataArray.reduce((sum, freq) => sum + freq, 0) / dataArray.length / 255;
+            const centerX = canvas.width / 2;
+            const centerY = reservedTop / 2;                  // Centered in top 20%
+            const radius = 25 + averageFrequency * 60;        // Try 15-40 base, 40-100 multiplier
+            
+            // Circle color cycles through rainbow independently of bars
+            const time = Date.now() * 0.001;
+            const rainbowHue = (time * 60) % 360;             // Try 30-120 for different cycle speeds
+            
+            // Draw outer circle with strong glow
+            ctx.strokeStyle = `hsl(${rainbowHue}, 90%, ${60 + averageFrequency * 25}%)`;
+            ctx.lineWidth = 5;                                // Try 3-8 for different thickness
+            ctx.shadowColor = ctx.strokeStyle;
+            ctx.shadowBlur = 25;                              // Try 15-40 for glow intensity
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Add inner bright ring for layered effect
+            ctx.strokeStyle = `hsl(${rainbowHue}, 90%, 80%)`;
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius * 0.7, 0, Math.PI * 2);  // Try 0.5-0.8 for inner ring size
+            ctx.stroke();
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', startVisualizer);
+        stopBtn.addEventListener('click', stopVisualizer);
+        
+        // Handle page unload
+        window.addEventListener('beforeunload', () => {
+            if (audioContext) {
+                audioContext.close();
+            }
+        });
+    </script>
+</body>
+</html> 

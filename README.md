@@ -55,3 +55,8 @@ This was my first time combining mouse events with multi-stage particle physics!
 **Today I discovered one of the most mind-blowing things in mathematics - the Sierpinski Triangle!**
 
 This fractal creates infinite complexity from the simplest rule: take a triangle, split it into 4 smaller triangles, throw away the middle one, and repeat forever. I built it with two stunning visual modes - classic triangles and bold circle patterns. The coolest part? This triangle has zero area but infinite perimeter. My brain still can't fully process that, but the code doesn't care - it just creates beauty!
+
+## [🎵 Audio Visualizer](javascript/audio_visualizer) `JavaScript` `WebAudio` `Visualization`
+**Created my first real-time music visualizer with a sliding rainbow that flows like liquid light across the screen!**
+
+This was my breakthrough into audio programming! The Web Audio API lets me grab live microphone data and break it into frequency components, then I map each frequency to a colored bar. But the magic happens with the sliding rainbow effect, colors continuously flow across the spectrum creating this hypnotic liquid light animation. The layout design splits the canvas perfectly: pulsing circle in the top area, flowing rainbow bars below. Watching sound waves become visual art in real-time completely changed how I think about programming!
