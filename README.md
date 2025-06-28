@@ -60,3 +60,8 @@ This fractal creates infinite complexity from the simplest rule: take a triangle
 **Created my first real-time music visualizer with a sliding rainbow that flows like liquid light across the screen!**
 
 This was my breakthrough into audio programming! The Web Audio API lets me grab live microphone data and break it into frequency components, then I map each frequency to a colored bar. But the magic happens with the sliding rainbow effect, colors continuously flow across the spectrum creating this hypnotic liquid light animation. The layout design splits the canvas perfectly: pulsing circle in the top area, flowing rainbow bars below. Watching sound waves become visual art in real-time completely changed how I think about programming!
+
+## [💥 Collision Explosions](c/pixel_renderer) `C` `SDL` `Graphics`
+**Advanced collision detection with explosive particle effects - building real game engine fundamentals!**
+
+Eight colorful squares bounce around the screen, but when two collide they explode into 25 particles with realistic gravity physics! This combines collision detection between moving objects, particle system architecture, and efficient memory management. Every collision creates a burst of colorful sparks that fall and fade like fireworks. Learning how to coordinate multiple game systems (squares create particles, particles respond to physics, everything renders at 60 FPS) feels like the foundation for building actual game engines.
