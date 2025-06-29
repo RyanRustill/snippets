@@ -65,3 +65,8 @@ This was my breakthrough into audio programming! The Web Audio API lets me grab 
 **Advanced collision detection with explosive particle effects - building real game engine fundamentals!**
 
 Eight colorful squares bounce around the screen, but when two collide they explode into 25 particles with realistic gravity physics! This combines collision detection between moving objects, particle system architecture, and efficient memory management. Every collision creates a burst of colorful sparks that fall and fade like fireworks. Learning how to coordinate multiple game systems (squares create particles, particles respond to physics, everything renders at 60 FPS) feels like the foundation for building actual game engines.
+
+## [🔍 Python Code Detective](python/python_detective) `Python` `Functions` `DataStructures`
+**Ever see those Twitter posts asking "What will this code output?" Now I can figure them out with the detective method!**
+
+This interactive quiz teaches step-by-step code analysis using a 6-step detective method. Instead of just testing knowledge, every explanation breaks down the thinking process for analyzing any Python code. I learned so much about structuring data with lists and dictionaries, and discovered that good programming isn't about syntax, it's about developing systematic thinking patterns. When you have to explain something clearly to someone else, you really understand it yourself!
