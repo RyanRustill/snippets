@@ -70,3 +70,8 @@ Eight colorful squares bounce around the screen, but when two collide they explo
 **Ever see those Twitter posts asking "What will this code output?" Now I can figure them out with the detective method!**
 
 This interactive quiz teaches step-by-step code analysis using a 6-step detective method. Instead of just testing knowledge, every explanation breaks down the thinking process for analyzing any Python code. I learned so much about structuring data with lists and dictionaries, and discovered that good programming isn't about syntax, it's about developing systematic thinking patterns. When you have to explain something clearly to someone else, you really understand it yourself!
+
+## [🧙 Terminal RPG Engine](c/terminal_rpg_engine) `C` `RPG` `GameDev`
+**A fully playable text-based RPG engine in C with dynamic memory, NPCs, combat, and exploration!**
+
+This was my first full-featured game system in C: players can explore a world of five connected rooms, pick up items, talk to friendly and hostile NPCs, engage in combat, and save/load their progress. Everything is built with modular files and fully dynamic memory allocation. I even added color-coded terminal output and ASCII UI. Feels like building the bones of an actual RPG system from scratch!

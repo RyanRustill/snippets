@@ -1,0 +1,6 @@
+5
+0|Town Square|You stand in the center of a bustling town square. Merchants hawk their wares while adventurers prepare for journeys.|1|-1|2|-1
+1|Dark Forest|Ancient trees tower overhead, their branches blocking most sunlight. You hear strange sounds in the distance.|-1|0|3|-1
+2|Blacksmith Shop|The ring of hammer on anvil echoes through this workshop. Weapons and armor line the walls.|-1|-1|-1|0
+3|Abandoned Cave|This cave feels eerily quiet. Water drips somewhere in the darkness ahead. A foul smell emanates from the depths.|4|-1|-1|1
+4|Crystal Chamber|Glowing crystals illuminate this underground chamber with an otherworldly blue light.|-1|3|-1|-1 

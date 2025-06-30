@@ -1,0 +1,23 @@
+# Build artifacts
+terminal_rpg
+obj/
+*.o
+*.exe
+
+# Save files
+savegame.txt
+*.sav
+
+# Debug files
+*.dSYM/
+vgcore.*
+
+# Editor files
+*~
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db 

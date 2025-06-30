@@ -1,0 +1,5 @@
+0|Rusty Sword|An old sword, but still sharp enough to be useful.|10|3|0
+1|Leather Armor|Basic protection made from treated leather.|25|0|2
+2|Health Potion|A red liquid that restores health when consumed.|50|0|0
+3|Iron Shield|A sturdy shield that provides good protection.|30|0|4
+4|Magic Crystal|A glowing crystal that pulses with mysterious energy.|100|1|1 
