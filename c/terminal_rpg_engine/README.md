@@ -1,4 +1,4 @@
-./# Terminal RPG Engine
+# 🧙 Terminal RPG Engine
 
 A complete text-based RPG engine written in C that demonstrates professional programming concepts through an interactive adventure game.
 
