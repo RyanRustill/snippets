@@ -1,6 +1,6 @@
 # 🎨 Paint App
 
-Today worked on a fully functional paint app that lets you draw smooth lines with different colors and brush sizes, and even save your artwork!
+I worked on a fully functional paint app that lets you draw smooth lines with different colors and brush sizes, and even save your artwork!
 
 ## What you'll see
 
@@ -24,11 +24,11 @@ The app tracks your drawing state with a boolean `isDrawing` that turns on when 
 
 ## Try changing this
 
-- **Line 175**: Change `ctx.lineCap = 'round'` to `'square'` or `'butt'` for different line endings
-- **Line 47**: Modify the `max="50"` in the brush size input to allow bigger or smaller brushes
-- **Line 42**: Change the default color from `#000000` (black) to any hex color code
-- **Line 142**: Add `ctx.globalCompositeOperation = 'multiply'` before drawing for blend modes
-- **Lines 12-17**: Customize the background gradient colors to match your style
+- **Line 176**: Change `ctx.lineCap = 'round'` to `'square'` or `'butt'` for different line endings
+- **Line 135**: Modify the `max="50"` in the brush size input to allow bigger or smaller brushes
+- **Line 130**: Change the default color from `#000000` (black) to any hex color code
+- **Line 201**: Add `ctx.globalCompositeOperation = 'multiply'` before drawing for blend modes
+- **Line 12**: Customize the background gradient colors to match your style
 
 ## What I learned
 
