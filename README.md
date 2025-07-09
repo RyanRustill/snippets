@@ -75,3 +75,8 @@ This interactive quiz teaches step-by-step code analysis using a 6-step detectiv
 **A fully playable text-based RPG engine in C with dynamic memory, NPCs, combat, and exploration!**
 
 This was my first full-featured game system in C: players can explore a world of five connected rooms, pick up items, talk to friendly and hostile NPCs, engage in combat, and save/load their progress. Everything is built with modular files and fully dynamic memory allocation. I even added color-coded terminal output and ASCII UI. Feels like building the bones of an actual RPG system from scratch!
+
+## [🎨 Paint App](javascript/paint_app) `JavaScript` `Canvas` `UI`
+**Built a fully functional paint app with smooth drawing, color picker, brush controls, and PNG export!**
+
+I had a lot of fun building this Paint App! you can pick any color, change brush sizes, and draw smooth lines just by moving your mouse around. The coolest part is clicking "Save Image" downloads your drawing as a PNG file with transparent backgrounds. I also added this little preview dot that shows you exactly what your brush will look like before you draw. The whole thing feels really responsive and fun to use!

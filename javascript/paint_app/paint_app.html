@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Paint App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input[type="color"] {
+            width: 50px;
+            height: 40px;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            background: none;
+        }
+
+        input[type="range"] {
+            width: 100px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        canvas {
+            border: 3px solid #fff;
+            border-radius: 10px;
+            background: white;
+            display: block;
+            margin: 0 auto;
+            cursor: crosshair;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .instructions {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .brush-preview {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brush-dot {
+            background: #fff;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Paint App</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="colorPicker">Color:</label>
+                <input type="color" id="colorPicker" value="#000000">
+            </div>
+            
+            <div class="control-group">
+                <label for="brushSize">Brush Size:</label>
+                <input type="range" id="brushSize" min="1" max="50" value="5">
+                <span id="sizeDisplay">5</span>px
+            </div>
+            
+            <div class="control-group">
+                <label>Preview:</label>
+                <div class="brush-preview">
+                    <div class="brush-dot" id="brushPreview"></div>
+                </div>
+            </div>
+            
+            <button id="clearCanvas">Clear Canvas</button>
+            <button id="saveImage">Save Image</button>
+        </div>
+        
+        <canvas id="paintCanvas" width="800" height="500"></canvas>
+        
+        <div class="instructions">
+            Click and drag to paint • Use the controls above to change your brush
+        </div>
+    </div>
+
+    <script>
+        // Get our canvas and set up the drawing context
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Get all our control elements
+        const colorPicker = document.getElementById('colorPicker');
+        const brushSize = document.getElementById('brushSize');
+        const sizeDisplay = document.getElementById('sizeDisplay');
+        const clearButton = document.getElementById('clearCanvas');
+        const saveButton = document.getElementById('saveImage');
+        const brushPreview = document.getElementById('brushPreview');
+        
+        // Drawing state - keeps track of whether we're currently drawing
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        
+        // Set up canvas for smooth drawing
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        // Update the brush preview whenever size or color changes
+        function updateBrushPreview() {
+            const size = brushSize.value;
+            const color = colorPicker.value;
+            
+            brushPreview.style.width = Math.min(size, 20) + 'px';
+            brushPreview.style.height = Math.min(size, 20) + 'px';
+            brushPreview.style.backgroundColor = color;
+            
+            sizeDisplay.textContent = size;
+        }
+        
+        // Function to start drawing
+        function startDrawing(e) {
+            isDrawing = true;
+            
+            // Get mouse position relative to canvas
+            const rect = canvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+            
+            // Set drawing properties
+            ctx.strokeStyle = colorPicker.value;
+            ctx.lineWidth = brushSize.value;
+            
+            // Start a new path
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+        }
+        
+        // Function to draw as mouse moves
+        function draw(e) {
+            if (!isDrawing) return; // Only draw if mouse is pressed
+            
+            // Get current mouse position
+            const rect = canvas.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+            
+            // Draw line from last position to current position
+            ctx.lineTo(currentX, currentY);
+            ctx.stroke();
+            
+            // Update last position for next frame
+            lastX = currentX;
+            lastY = currentY;
+        }
+        
+        // Function to stop drawing
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath(); // Reset the path
+        }
+        
+        // Function to clear the entire canvas
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // Function to save the canvas as a PNG image
+        function saveImage() {
+            // Create a temporary download link
+            const link = document.createElement('a');
+            
+            // Convert canvas to PNG data URL
+            const imageData = canvas.toDataURL('image/png');
+            
+            // Set up the download
+            link.href = imageData;
+            link.download = 'my-artwork.png';
+            
+            // Trigger the download
+            link.click();
+        }
+        
+        // Add event listeners for mouse events
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing); // Stop drawing if mouse leaves canvas
+        
+        // Add event listeners for controls
+        colorPicker.addEventListener('change', updateBrushPreview);
+        brushSize.addEventListener('input', updateBrushPreview);
+        clearButton.addEventListener('click', clearCanvas);
+        saveButton.addEventListener('click', saveImage);
+        
+        // Initialize the brush preview
+        updateBrushPreview();
+        
+        // Welcome message in console for anyone who opens dev tools
+        console.log('🎨 Paint App created by Ryan Rustill');
+        console.log('Try painting something cool!');
+    </script>
+</body>
+</html> 
