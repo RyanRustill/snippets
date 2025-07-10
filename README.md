@@ -80,3 +80,8 @@ This was my first full-featured game system in C: players can explore a world of
 **Built a fully functional paint app with smooth drawing, color picker, brush controls, and PNG export!**
 
 I had a lot of fun building this Paint App! you can pick any color, change brush sizes, and draw smooth lines just by moving your mouse around. The coolest part is clicking "Save Image" downloads your drawing as a PNG file with transparent backgrounds. I also added this little preview dot that shows you exactly what your brush will look like before you draw. The whole thing feels really responsive and fun to use!
+
+## [🌐 HTTP Web Server](c/http_web_server) `C` `Networking` `Berkeley Sockets`
+**Today I rebuilt an earlier attempt at a HTTP web server from scratch using C and Berkeley sockets!**
+
+This was my second time diving into low-level network programming, and seeing a web browser actually connect to my C program feels incredible. The server handles real HTTP requests with a cyberpunk-themed web interface, source code viewer, and 404 error demo. The coolest part is watching the terminal output as your browser makes requests - you can see the actual HTTP parsing happening in real-time! This is exactly how real web servers work under the hood, from socket creation to request routing.
