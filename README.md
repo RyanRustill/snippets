@@ -85,3 +85,8 @@ I had a lot of fun building this Paint App! you can pick any color, change brush
 **Today I rebuilt an earlier attempt at a HTTP web server from scratch using C and Berkeley sockets!**
 
 This was my second time diving into low-level network programming, and seeing a web browser actually connect to my C program feels incredible. The server handles real HTTP requests with a cyberpunk-themed web interface, source code viewer, and 404 error demo. The coolest part is watching the terminal output as your browser makes requests - you can see the actual HTTP parsing happening in real-time! This is exactly how real web servers work under the hood, from socket creation to request routing.
+
+## [🧠 Memory Card Game](javascript/memory_game) `JavaScript` `3D Transforms` `Game State`
+**Built my first memory game with 3D card flips and rainbow gradients - each matched pair lights up in its own color!**
+
+This morning I discovered CSS 3D transforms and the results are pretty neat! Click any card and it flips in actual 3D space using `transform: rotateY(180deg)`. But the best part is when you find a match, each emoji pair has its own gradient color, so the completed board looks like a rainbow checkerboard! Managing game state was tricky (had a bug where clicking too fast would flip three cards!) but learning about `data-` attributes and CSS attribute selectors opened up so many possibilities. The victory screen slides over everything with your stats when you win!
